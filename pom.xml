@@ -56,6 +56,12 @@
     <artifactId>webjars-locator</artifactId>
     <version>0.46</version>
 </dependency>
+
+             <!-- Email support -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
         
         <!-- Other utilities -->
         <dependency>
