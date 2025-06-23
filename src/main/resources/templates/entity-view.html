@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${entityName} + ' Manager'"></title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0" th:text="${entityName} + ' Entities'"></h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th th:each="prop : ${entities[0]?.getClass()?.declaredFields}"
+                                    th:text="${prop.name}"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="entity : ${entities}">
+                                <td th:each="prop : ${entity.getClass().declaredFields}">
+                                    <span th:text="${#object?.accessor(entity)?.getPropertyValue(prop.name)}"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                            <a class="page-link" th:href="@{/dbmanager/{entity}(entity=${entityName}, page=${currentPage-1})}">Previous</a>
+                        </li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                            th:classappend="${i == currentPage} ? 'active'">
+                            <a class="page-link" th:href="@{/dbmanager/{entity}(entity=${entityName}, page=${i})}" th:text="${i+1}"></a>
+                        </li>
+                        <li class="page-item" th:classappend="${currentPage >= totalPages-1} ? 'disabled'">
+                            <a class="page-link" th:href="@{/dbmanager/{entity}(entity=${entityName}, page=${currentPage+1})}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
